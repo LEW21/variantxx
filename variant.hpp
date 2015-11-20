@@ -104,12 +104,14 @@ namespace xx
 		variant(const variant<X...>& o, std::enable_if_t<includes_all<X...>>* = 0)
 		{
 			init(o);
+			assert(_type);
 		}
 
 		template <typename... X>
 		variant(variant<X...>&& o, std::enable_if_t<includes_all<X...>>* = 0)
 		{
 			init(std::move(o));
+			assert(_type);
 		}
 
 		// Unsafe conversion of not-compatible variants - explicit.
@@ -119,12 +121,14 @@ namespace xx
 		explicit variant(const variant<X...>& o, std::enable_if_t<!includes_all<X...>>* = 0)
 		{
 			init_tolerant(o);
+			assert(_type);
 		}
 
 		template <typename... X>
 		explicit variant(variant<X...>&& o, std::enable_if_t<!includes_all<X...>>* = 0)
 		{
 			init_tolerant(std::move(o));
+			assert(_type);
 		}
 
 		// Copy/move.
@@ -146,6 +150,7 @@ namespace xx
 		{
 			destroy();
 			init(o);
+			assert(_type);
 			return *this;
 		}
 
@@ -154,6 +159,7 @@ namespace xx
 		{
 			destroy();
 			init(std::move(o));
+			assert(_type);
 			return *this;
 		}
 
@@ -163,6 +169,7 @@ namespace xx
 		{
 			destroy();
 			init(o);
+			assert(_type);
 			return *this;
 		}
 
@@ -170,6 +177,7 @@ namespace xx
 		{
 			destroy();
 			init(std::move(o));
+			assert(_type);
 			return *this;
 		}
 
@@ -306,6 +314,7 @@ namespace xx
 	constexpr void variant<T...>::destroy()
 	{
 		noop((_destroy<T>(), 1)...);
+		_type = 0;
 	}
 
 	template <typename... T> template <typename... X>
