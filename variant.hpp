@@ -33,6 +33,8 @@ namespace xx
 	template <typename... T>
 	class variant;
 
+	struct null_t {null_t(){}};
+
 	template <typename... X>
 	struct _variant_is<variant<X...>>
 	{
@@ -214,19 +216,44 @@ namespace xx
 		template <typename F, typename... X> struct FirstTypeT { using type = F; };
 		using FirstType = typename FirstTypeT<T...>::type;
 
-		template <typename X, typename F>
-		constexpr void _call(F&& f, decltype(f(std::declval<X>()))& out) const
+		template <typename X, typename Ret, typename F>
+		constexpr void _call(F&& f, variant<null_t, Ret>& ret) const
 		{
 			if (is<X>())
-				out = f(get<X>());
+			{
+				ret = Ret{f(get<X>())};
+				assert(ret._type == &typeid(Ret));
+			}
 		}
 
 		template <typename F>
 		constexpr auto call(F&& f) const -> decltype(f(std::declval<FirstType>()))
 		{
-			auto out = decltype(f(std::declval<FirstType>())){};
-			noop((_call<T>(std::forward<F>(f), out), 1)...);
-			return out;
+			using Ret = decltype(f(std::declval<FirstType>()));
+			auto ret = variant<null_t, Ret>{null_t{}};
+			noop((_call<T, Ret>(std::forward<F>(f), ret), 1)...);
+			assert(ret._type == &typeid(Ret));
+			return ret.template get<Ret>();
+		}
+
+		template <typename X, typename Ret, typename F>
+		constexpr void _call(F&& f, variant<null_t, Ret>& ret)
+		{
+			if (is<X>())
+			{
+				ret = Ret{f(get<X>())};
+				assert(ret._type == &typeid(Ret));
+			}
+		}
+
+		template <typename F>
+		constexpr auto call(F&& f) -> decltype(f(std::declval<FirstType&>()))
+		{
+			using Ret = decltype(f(std::declval<FirstType&>()));
+			auto ret = variant<null_t, Ret>{null_t{}};
+			noop((_call<T, Ret>(std::forward<F>(f), ret), 1)...);
+			assert(ret._type == &typeid(Ret));
+			return ret.template get<Ret>();
 		}
 
 		// Unsafe conversion to a single type - explicit.
@@ -283,7 +310,7 @@ namespace xx
 	template <typename... T> template <typename X, typename U>
 	inline constexpr void variant<T...>::_init(U&& o)
 	{
-		if (o.template is<X>())
+		if (o._type == &typeid(X))
 		{
 			_type = o._type;
 			new (&get<X>()) X(std::move(o.template get<X>()));
