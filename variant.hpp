@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <typeinfo>
 #include <algorithm>
+#include <cassert>
 
 namespace xx
 {

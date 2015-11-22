@@ -58,8 +58,9 @@ void test_variant()
 	eat<CA>(a);
 	eat<ABC>(b);
 	eat<AB>(b);
-	//eat<BC>(b);
-	eat<BC>(BC{b});
+	//eat<BC>(b); // wouldn't compile - need explicit conversion
+	//eat<BC>(BC{b}); // would be undefined behavior
+	eat<CA>(CA{b});
 	auto x = A(c);
 }
 
