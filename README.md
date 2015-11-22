@@ -8,7 +8,6 @@ class xx::variant<T...>;
 ## What's that?
 A discriminated union is an object that contains exactly one object of one of specified classes (ie. a union) and knows its type.
 
-## Examples
 ```c++
 using IntOrFloat = xx::variant<int, float>;
 
@@ -22,6 +21,16 @@ else
     std::cout << v.get<float>() << std::endl;
 ```
 
+## Usage
+```sh
+git submodule add https://github.com/LEW21/variantxx.git
+```
+
+```c++
+#include "variantxx/variant.hpp"
+```
+
+## More examples
 ```c++
 class Select; class Insert; class Delete;
 using AnyQuery = xx::variant<Select, Insert, Delete>;
