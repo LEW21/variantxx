@@ -50,8 +50,9 @@ void test_variant()
 
 	//b = c;
 
-	// This would be undefined behavior
-	//auto z = BC{c};
+	if (false) {
+		auto z = BC{c}; // would be undefined behavior
+	}
 
 	//eat<A>(e);
 	eat<CA>(e);
@@ -59,7 +60,9 @@ void test_variant()
 	eat<ABC>(b);
 	eat<AB>(b);
 	//eat<BC>(b); // wouldn't compile - need explicit conversion
-	//eat<BC>(BC{b}); // would be undefined behavior
+	if (false) {
+		eat<BC>(BC{b}); // would be undefined behavior
+	}
 	eat<CA>(CA{b});
 	auto x = A(c);
 }
