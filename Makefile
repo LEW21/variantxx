@@ -1,7 +1,7 @@
 
 CXX=g++
 CXX=clang++
-CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -g -std=c++17 -fdiagnostics-color -Wl,-E
+CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -g -std=c++20 -fdiagnostics-color -Wl,-E
 
 .PHONY: test test_variant
 
