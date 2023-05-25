@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <algorithm>
 #include <utility>
+#include <new>
 #include <cassert>
 
 namespace xx
