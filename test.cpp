@@ -69,11 +69,11 @@ void test_variant()
 
 void test_in_place()
 {
-	auto x = ABC{in_place<C>};
+	auto x = ABC{in_place_type<C>};
 	assert(x.is<C>());
 	assert(x.get<C>().y == 55);
 
-	auto z = ABC{in_place<C>, 77};
+	auto z = ABC{in_place_type<C>, 77};
 	assert(z.is<C>());
 	assert(z.get<C>().y == 77);
 }

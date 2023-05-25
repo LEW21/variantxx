@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <typeinfo>
 #include <algorithm>
+#include <utility>
 #include <cassert>
 
 namespace xx
@@ -18,12 +19,6 @@ namespace xx
 
 	template <typename... T>
 	const bool pack_contains = _pack_contains<T...>();
-
-	template <typename T>
-	struct in_place_t {};
-
-	template <typename T>
-	extern constexpr const in_place_t<T> in_place = in_place_t<T>{};
 
 	template <typename X>
 	struct _variant_is
@@ -95,7 +90,7 @@ namespace xx
 		}
 
 		template <typename X, typename Z = std::enable_if_t<includes<X>>, typename... Arg>
-		variant(in_place_t<X>, Arg&&... arg)
+		variant(std::in_place_type_t<X>, Arg&&... arg)
 			: _type(&typeid(X))
 		{
 			new (&data) X{std::forward<Arg>(arg)...};
